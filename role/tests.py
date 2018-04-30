@@ -13,7 +13,7 @@ API_PR_ALL = '/api/blogs/' 查看，局部修改，删除文章
 简单起见,文章仅title可编辑
 
 1. 数据库初始化时，默认新建3个用户,['admin', 'random1', 'random2'],一个管理员两个普通用户
-2. 关于登录,只需在请求COOKIES中增加 'username': admin 一组值即可，实现伪登录
+2. 关于登录,只需在请求COOKIES中增加 'username':'admin' 一组值即可，实现伪登录
 3. 所有url必须以slash结尾,否则报权限错误
 4. 错误/异常: 返回键值对 {'Fail': 'reason'} json数据
 
@@ -45,17 +45,27 @@ Exception 对象不存在
 }
 
 GET {
-    title: id
+id : title
 }
 
-PATCH # 支持修改文章blog.title属性,设置cookies {'title': new_title}
+PUT # 支持修改文章blog.title属性
+# 表单数据中 title = newtitle
 返回{
     id: new_title
 }
 
 
 DETELE { # 返回被删除文章的id/title
-    title: id
+    "blog": [
+        7 #删除的blog id
+    ],
+    "access": [
+        "/api/blog/7/" # 删除的网址
+    ],
+    "roleacess": [
+        15, #删除的roleaccess记录的id
+        16
+    ]
 }
 
 

@@ -15,7 +15,7 @@ class BlogView(ListView):
 
     def get(self, request, *args, **kwargs):
         self.blogs = self.get_queryset()
-        blogs = {blog.title: blog.id for blog in self.blogs}
+        blogs = {blog.id: blog.title for blog in self.blogs}
         num_blog = len(self.blogs)
         out = {'nums': num_blog, 'blogs': blogs}
         return JsonResponse(out, status=200)
@@ -24,7 +24,7 @@ class BlogView(ListView):
         title = self.request.POST.get('title', 'Default')
         user = self.request.COOKIES['username']
         new_blog_id = create_blog(title, user)
-        out = {title: new_blog_id}
+        out = {new_blog_id: title}
         return JsonResponse(out, status=200)
 
 
@@ -37,7 +37,7 @@ class BlogDetailView(View):
         except Blog.DoesNotExist:
             return JsonResponse({'Fail': 'Blog does not Exist'}, status=404)
         out = {
-            blog.title: blog.id
+            blog.id: blog.title
         }
         return JsonResponse(out, status=200)
 
@@ -51,8 +51,7 @@ class BlogDetailView(View):
         if blog.author_id != u_id:
             return JsonResponse({'Fail': 'only author can edit'}, status=401)
         else:
-            # 数据放在COOILKES
-            new_title = self.request.COOKIES.get('title')
+            new_title = self.request.POST.get('title')
             if new_title:
                 blog.save()
                 return JsonResponse({blog.id: blog.title})

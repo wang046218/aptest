@@ -50,5 +50,5 @@ class AuthMiddleware(MiddlewareMixin):
         if isinstance(res, HttpResponse):
             return res
         if not res:
-            return JsonResponse({'Fail': 'Authentication required'}, status=401)
+            return JsonResponse({'Fail': 'perm deny'}, status=401)
         return
